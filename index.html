@@ -156,7 +156,7 @@
     // --- Notes display ---
     const noteEl = document.getElementById('noteDisplay');
     let notes = [];
-    setInterval(()=>{
+    //setInterval(()=>{
      fetch('notes.json')
       .then(r => r.json())
       .then(data => { notes = data; if(notes.length>0) noteEl.textContent = notes[0];
@@ -166,7 +166,7 @@
      noteEl.textContent = notes[index];
      }, 10000);
      })
-    }, 10000);
+    //}, 10000);
     .catch(e=>{noteEl.textContent='No notes loaded';});
     /*
     const msgs = ['No channel found'];
