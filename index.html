@@ -78,6 +78,11 @@
 
     .led{position:absolute;right:4vmin;bottom:3vmin;width:1.6vmin;height:1.6vmin;border-radius:50%;background:radial-gradient(circle at 35% 35%, #fff, #ff2d55);box-shadow:0 0 8px rgba(255,45,85,0.6)}
 
+    .note-indicator{
+      position:absolute;right:6%;bottom:7%;font-size:1.8vmin;color:rgba(200,200,220,0.6);
+      font-family: 'Courier New', monospace;
+    }
+
     @media (max-aspect-ratio:3/2){.bigclock{font-size:12vmin}}
   </style>
 </head>
@@ -104,7 +109,8 @@
         </div>
 
         <div class="info" aria-hidden="true">
-          <div class="info" id="noteDisplay">Loading notes...</div>
+          <div class="msg" id="noteDisplay">Loading notes...</div>
+          <div class="note-indicator" id="noteIndicator"></div>
         </div>
 
       </div>
@@ -135,10 +141,6 @@
     function exit(){
       try{ window.location.href = 'about:blank'; }catch(e){}
     }
-    /*
-    window.addEventListener('keydown', exit);
-    window.addEventListener('click', exit);
-    window.addEventListener('touchstart', exit); */
 
     const mq = window.matchMedia('(prefers-reduced-motion: reduce)');
     if(mq.matches){
@@ -153,26 +155,77 @@
     }
     window.addEventListener('resize', adapt); adapt();
 
-    // --- Notes display ---
+    // --- Notes display with navigation ---
     const noteEl = document.getElementById('noteDisplay');
+    const indicatorEl = document.getElementById('noteIndicator');
     let notes = [];
-    //setInterval(()=>{
-     fetch('notes.json')
+    let currentIndex = 0;
+    let autoRotateInterval = null;
+
+    function updateNoteDisplay() {
+      if (notes.length === 0) {
+        noteEl.textContent = 'No notes loaded';
+        indicatorEl.textContent = '';
+        return;
+      }
+      noteEl.textContent = notes[currentIndex];
+      indicatorEl.textContent = `${currentIndex + 1}/${notes.length}`;
+    }
+
+    function nextNote() {
+      if (notes.length === 0) return;
+      currentIndex = (currentIndex + 1) % notes.length;
+      updateNoteDisplay();
+      resetAutoRotate();
+    }
+
+    function prevNote() {
+      if (notes.length === 0) return;
+      currentIndex = (currentIndex - 1 + notes.length) % notes.length;
+      updateNoteDisplay();
+      resetAutoRotate();
+    }
+
+    function startAutoRotate() {
+      if (autoRotateInterval) clearInterval(autoRotateInterval);
+      autoRotateInterval = setInterval(() => {
+        nextNote();
+      }, 10000);
+    }
+
+    function resetAutoRotate() {
+      startAutoRotate();
+    }
+
+    // Keyboard and remote control navigation
+    window.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowRight' || e.key === 'Right') {
+        e.preventDefault();
+        nextNote();
+      } else if (e.key === 'ArrowLeft' || e.key === 'Left') {
+        e.preventDefault();
+        prevNote();
+      }
+    });
+
+    // Load notes from JSON
+    fetch('notes.json')
       .then(r => r.json())
-      .then(data => { notes = data; if(notes.length>0) noteEl.textContent = notes[0];
-     let index = 0;
-     setInterval(()=>{
-     index = (index + 1) % notes.length;
-     noteEl.textContent = notes[index];
-     }, 10000);
-     })
-    //}, 10000);
-    .catch(e=>{noteEl.textContent='No notes loaded';});
-    /*
-    const msgs = ['No channel found'];
-    let mi = 0; setInterval(()=>{
-      mi = (mi+1) % msgs.length; document.getElementById('message').textContent = msgs[mi];
-    },10000); */
+      .then(data => {
+        notes = data;
+        if (notes.length > 0) {
+          currentIndex = 0;
+          updateNoteDisplay();
+          startAutoRotate();
+        } else {
+          noteEl.textContent = 'No notes available';
+          indicatorEl.textContent = '';
+        }
+      })
+      .catch(e => {
+        noteEl.textContent = 'No notes loaded';
+        indicatorEl.textContent = '';
+      });
   </script>
 </body>
 </html>
