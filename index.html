@@ -3,7 +3,6 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
-  <meta http-equiv="refresh" content="300">
   <title>Retro TV Screensaver</title>
   <style>
     html,body{height:100%;margin:0;background:#000;overflow:hidden;font-family: 'Courier New', monospace}
@@ -157,15 +156,17 @@
     // --- Notes display ---
     const noteEl = document.getElementById('noteDisplay');
     let notes = [];
-    fetch('notes.json')
-    .then(r => r.json())
-    .then(data => { notes = data; if(notes.length>0) noteEl.textContent = notes[0];
-    let index = 0;
     setInterval(()=>{
-    index = (index + 1) % notes.length;
-    noteEl.textContent = notes[index];
-    }, 10000);
-    })
+     fetch('notes.json')
+      .then(r => r.json())
+      .then(data => { notes = data; if(notes.length>0) noteEl.textContent = notes[0];
+     let index = 0;
+     setInterval(()=>{
+     index = (index + 1) % notes.length;
+     noteEl.textContent = notes[index];
+     }, 10000);
+     });
+    }, 300000);
     .catch(e=>{noteEl.textContent='No notes loaded';});
     /*
     const msgs = ['No channel found'];
