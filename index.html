@@ -1,0 +1,161 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <title>Retro TV Screensaver</title>
+  <style>
+    html,body{height:100%;margin:0;background:#000;overflow:hidden;font-family: 'Courier New', monospace}
+    #wrap{position:relative;width:100%;height:100%;display:flex;align-items:center;justify-content:center}
+
+    .bezel{
+      position:absolute;inset:6vmin;
+      border-radius:3vmin;background:linear-gradient(180deg,#0b0b0b 0%, #111 30%, #222 100%);
+      box-shadow:0 10px 40px rgba(0,0,0,0.9), inset 0 3px 10px rgba(255,255,255,0.02);
+      display:flex;align-items:center;justify-content:center;overflow:hidden
+    }
+    .screen{
+      width:88%;height:78%;background:radial-gradient(1200px 700px at 40% 30%, rgba(40,40,60,0.28), rgba(0,0,0,0.65));
+      border-radius:1vmin;box-shadow: inset 0 0 120px rgba(0,0,0,0.6);overflow:hidden;position:relative;
+      border:3px solid rgba(0,0,0,0.45)
+    }
+
+    .pixels{
+      position:absolute;inset:4% 4% 6% 4%;
+      display:flex;align-items:center;justify-content:center;filter:contrast(1.05) saturate(1.08);
+      transform: translateZ(0);
+    }
+
+    .bigclock {
+      font-family: 'Courier New', monospace;letter-spacing:0.25ch;color:#fbf7ff;text-align:center;
+      text-shadow: 0 0 12px rgba(255,255,255,0.12), 0 0 40px rgba(120,60,255,0.06);
+      mix-blend-mode:screen; font-size:10vmin;
+      transform: translateY(0);
+      position:relative;
+      animation:floaty 4s ease-in-out infinite;
+    }
+
+    .bigclock::before, .bigclock::after{
+      content:attr(data-text);position:absolute;left:0;right:0;top:0;bottom:0;
+      z-index:-1;opacity:0.8;filter:blur(8px);
+    }
+    .bigclock::before{color:#ffd6ef;transform:translateX(-0.8vmin)}
+    .bigclock::after{color:#c6f7ff;transform:translateX(0.9vmin)}
+
+    @keyframes floaty{0%{transform:translateY(0)}50%{transform:translateY(-1.2vmin)}100%{transform:translateY(0)}}
+
+    .colorbars{position:absolute;left:0;bottom:0;height:12%;width:100%;display:flex}
+    .bar{flex:1;height:100%}
+    .bar:nth-child(1){background:#ff3b30}
+    .bar:nth-child(2){background:#ff9500}
+    .bar:nth-child(3){background:#ffcc00}
+    .bar:nth-child(4){background:#34c759}
+    .bar:nth-child(5){background:#007aff}
+    .bar:nth-child(6){background:#5856d6}
+    .bar:nth-child(7){background:#ff2d55}
+
+    .scanline{
+      position:absolute;left:0;right:0;top:0;height:100%;pointer-events:none;
+      background-image:linear-gradient(transparent 50%, rgba(0,0,0,0.18) 51%);
+      background-size:100% 4px;mix-blend-mode:multiply;opacity:0.55
+    }
+
+    .noise{position:absolute;inset:0;pointer-events:none;background-image:repeating-linear-gradient(transparent, rgba(255,255,255,0.02) 1px);opacity:0.04}
+    .static{position:absolute;inset:0;pointer-events:none;background-image:radial-gradient(circle, rgba(255,255,255,0.02) 1px, transparent 1px);background-size:6px 6px;opacity:0.02}
+
+    @keyframes wobble{0%{transform:translateX(-0.25vmin)}50%{transform:translateX(0.25vmin)}100%{transform:translateX(-0.25vmin)}}
+    .screen-inner{position:absolute;inset:0;animation:wobble 10s ease-in-out infinite}
+
+    .sweep{position:absolute;left:-40%;top:0;height:100%;width:40%;background:linear-gradient(90deg, rgba(255,255,255,0.02), rgba(255,255,255,0.06), rgba(255,255,255,0.02));mix-blend-mode:overlay;opacity:0.06;animation:sweep 9s linear infinite}
+    @keyframes sweep{0%{left:-40%}50%{left:120%}100%{left:-40%}}
+
+    .info{
+      position:absolute;left:6%;right:6%;bottom:7%;height:10%;display:flex;align-items:center;justify-content:space-between;padding:0 1vmin
+    }
+    .msg{font-size:2.2vmin;color:rgba(200,200,220,0.9);opacity:0.9}
+
+    .vignette{position:absolute;inset:0;border-radius:1vmin;box-shadow:inset 0 60px 120px rgba(0,0,0,0.7), inset 0 -30px 60px rgba(0,0,0,0.35);pointer-events:none}
+
+    .led{position:absolute;right:4vmin;bottom:3vmin;width:1.6vmin;height:1.6vmin;border-radius:50%;background:radial-gradient(circle at 35% 35%, #fff, #ff2d55);box-shadow:0 0 8px rgba(255,45,85,0.6)}
+
+    @media (max-aspect-ratio:3/2){.bigclock{font-size:12vmin}}
+  </style>
+</head>
+<body>
+  <div id="wrap">
+    <div class="bezel" role="img" aria-label="Retro television screensaver">
+      <div class="screen" id="screen">
+        <div class="screen-inner">
+          <div class="pixels" id="pixels">
+            <div class="bigclock" id="bigClock" data-text="--:--:--">--:--:--</div>
+          </div>
+
+          <div class="colorbars" aria-hidden="true">
+            <div class="bar"></div><div class="bar"></div><div class="bar"></div>
+            <div class="bar"></div><div class="bar"></div><div class="bar"></div>
+            <div class="bar"></div>
+          </div>
+
+          <div class="scanline" aria-hidden="true"></div>
+          <div class="sweep" aria-hidden="true"></div>
+          <div class="noise" aria-hidden="true"></div>
+          <div class="static" aria-hidden="true"></div>
+          <div class="vignette" aria-hidden="true"></div>
+        </div>
+
+        <div class="info" aria-hidden="true">
+          <div class="msg" id="message">No channel found</div>
+        </div>
+
+      </div>
+      <div class="led" aria-hidden="true"></div>
+    </div>
+  </div>
+
+  <script>
+    function pad(n){return n<10?('0'+n):n}
+    function updateClock(){
+      const now=new Date();
+      const hh=pad(now.getHours()), mm=pad(now.getMinutes()), ss=pad(now.getSeconds());
+      const txt = hh + ':' + mm + ':' + ss;
+      const bigClock=document.getElementById('bigClock');
+      bigClock.textContent = txt;
+      bigClock.setAttribute('data-text', txt);
+    }
+    setInterval(updateClock,1000);updateClock();
+
+    const screen = document.getElementById('screen');
+    function jitter(){
+      const tx = (Math.random()-0.5) * 0.25;
+      const ty = (Math.random()-0.5) * 0.25;
+      screen.style.transform = `translate(${tx}vmin, ${ty}vmin)`;
+    }
+    setInterval(jitter, 900);
+
+    function exit(){
+      try{ window.location.href = 'about:blank'; }catch(e){}
+    }
+    window.addEventListener('keydown', exit);
+    window.addEventListener('click', exit);
+    window.addEventListener('touchstart', exit);
+
+    const mq = window.matchMedia('(prefers-reduced-motion: reduce)');
+    if(mq.matches){
+      document.querySelectorAll('*').forEach(el => el.style.animation = 'none');
+    }
+
+    function adapt(){
+      const w = window.innerWidth, h = window.innerHeight;
+      const base = Math.min(w,h);
+      const bigClock=document.getElementById('bigClock');
+      bigClock.style.fontSize = Math.max(28, Math.round(base * 0.09)) + 'px';
+    }
+    window.addEventListener('resize', adapt); adapt();
+
+    const msgs = ['No channel found'];
+    let mi = 0; setInterval(()=>{
+      mi = (mi+1) % msgs.length; document.getElementById('message').textContent = msgs[mi];
+    },10000);
+  </script>
+</body>
+</html>
