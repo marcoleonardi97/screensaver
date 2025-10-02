@@ -135,9 +135,10 @@
     function exit(){
       try{ window.location.href = 'about:blank'; }catch(e){}
     }
+    /*
     window.addEventListener('keydown', exit);
     window.addEventListener('click', exit);
-    window.addEventListener('touchstart', exit);
+    window.addEventListener('touchstart', exit); */
 
     const mq = window.matchMedia('(prefers-reduced-motion: reduce)');
     if(mq.matches){
