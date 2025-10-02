@@ -104,7 +104,7 @@
         </div>
 
         <div class="info" aria-hidden="true">
-          <div class="msg" id="message">No channel found</div>
+          <div class="info" id="noteDisplay">Loading notes...</div>
         </div>
 
       </div>
@@ -152,10 +152,24 @@
     }
     window.addEventListener('resize', adapt); adapt();
 
+    // --- Notes display ---
+    const noteEl = document.getElementById('noteDisplay');
+    let notes = [];
+    fetch('notes.json')
+    .then(r => r.json())
+    .then(data => { notes = data; if(notes.length>0) noteEl.textContent = notes[0];
+    let index = 0;
+    setInterval(()=>{
+    index = (index + 1) % notes.length;
+    noteEl.textContent = notes[index];
+    }, 10000);
+    })
+    .catch(e=>{noteEl.textContent='No notes loaded';});
+    /*
     const msgs = ['No channel found'];
     let mi = 0; setInterval(()=>{
       mi = (mi+1) % msgs.length; document.getElementById('message').textContent = msgs[mi];
-    },10000);
+    },10000); */
   </script>
 </body>
 </html>
