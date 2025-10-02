@@ -27,16 +27,12 @@ A simple vintage CRT television screensaver that displays the current time and r
 
 1. Clone this repository:
    ```bash
-   git clone https://github.com/yourusername/retro-screensaver.git
-   cd retro-screensaver
+   git clone https://github.com/marcoleonardi97/screensaver.git
+   cd screensaver
    ```
 
-2. Open `index.html` in your browser, or serve it locally:
-   ```bash
-   python -m http.server 8000
-   ```
-
-3. Navigate to `http://localhost:8000`
+2. Publish the clone on GitHub Pages
+3. Use the custom commands below to manage notes
 
 ## 📝 Managing Notes
 
@@ -60,7 +56,9 @@ clearnotes
 ### Set Up Terminal Commands (Optional)
 
 Add these functions to your `~/.bashrc` or `~/.zshrc`:
-
+```
+vim ~/.zshrc or vim ~/.bashrc
+```
 ```bash
 # Navigate to your repo directory first
 cd /path/to/retro-screensaver
